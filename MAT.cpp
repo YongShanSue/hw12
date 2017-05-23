@@ -9,9 +9,19 @@
 #include <sys/time.h>
 MAT::MAT(int dim){// uninit constructor
 	n=dim;
+	ROW=0;
+	COLUMN=0;
 	va=(VEC **)malloc(n*sizeof(VEC*));
 	for(int i=0;i<n;i++)
 		va[i]=newVEC(n);
+}
+MAT::MAT(int row, int column){// uninit constructor
+	n=0;
+	ROW=row;
+	COLUMN=column;
+	va=(VEC **)malloc(row*sizeof(VEC*));
+	for(int i=0;i<row;i++)
+		va[i]=newVEC(column);
 }
 MAT::MAT(const MAT &m1){ // copy constructor
 	VEC **vsrc=m1.va; // to get around not indexing const MAT
@@ -39,6 +49,12 @@ MAT::~MAT(){ // destructor
 }
 int MAT::dim(){ // return dimension of the matrix
 	return n;
+}
+int MAT::getrow(){ // return dimension of the matrix
+	return ROW;
+}
+int MAT::getcolumn(){ // return dimension of the matrix
+	return COLUMN;
 }
 MAT MAT::tpose(){ // transpose
 	MAT mnew(n);
@@ -129,9 +145,17 @@ MAT MAT::operator/(double a){ // m / dbl
 }
 
 void MAT::print(){		//Print the matrix
-	for(int row=0;row<n;row++){
-		va[row]->print();
+	if(n==0){
+		for(int row=0;row<ROW;row++){
+			va[row]->print();
+		}
 	}
+	else{
+		for(int row=0;row<n;row++){
+			va[row]->print();
+		}
+	}
+	
 		
 }
 
@@ -801,3 +825,57 @@ void getLinearSolution(MAT A,VEC & y,VEC b){
 	return;
 }
 
+MAT forwardEuler(VEC &initial,double start, double end, double step){
+	double row= (end-start)/step+1;
+	MAT generateMAt(row,initial.len());
+	generateMAt[0]=initial;
+	for(int i=1;i<row;i++){
+		VEC reg = generateMAt[i-1];
+		generateMAt[i] = 		function12_forwardEuler(reg,step);
+	}
+	return generateMAt;
+}
+
+MAT backwardEuler(VEC &initial,double start, double end, double step){
+	double row= (end-start)/step+1;
+	MAT generateMAt(row,initial.len());
+	generateMAt[0]=initial;
+	for(int i=1;i<row;i++){
+		VEC reg = generateMAt[i-1];
+		generateMAt[i] = 		function12_backwardEuler(reg,step);
+
+	}
+	return generateMAt;
+}
+MAT trep(VEC &initial,double start, double end, double step){
+	double row= (end-start)/step+1;
+	MAT generateMAt(row,initial.len());
+	generateMAt[0]=initial;
+	for(int i=1;i<row;i++){
+		VEC reg = generateMAt[i-1];
+		generateMAt[i] = 		function12_trep(reg,step);
+
+	}
+	return generateMAt;
+}
+VEC columnMax(MAT &m1){
+	VEC v1 = m1[0];
+	for(int i=1;i<m1.getrow();i++){
+		for(int j=0;j<m1.getcolumn();j++){
+			if(v1[j] < m1[i][j])
+				v1[j]=m1[i][j];
+		}
+	}
+	
+	return v1;
+}
+VEC columnMin(MAT &m1){
+	VEC v1=m1[0];
+	for(int i=1;i<m1.getrow();i++){
+		for(int j=0;j<m1.getcolumn();j++){
+			if(v1[j] > m1[i][j])
+				v1[j]=m1[i][j];
+		}
+	}
+	return v1;
+}

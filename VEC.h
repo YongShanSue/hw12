@@ -30,6 +30,8 @@ class VEC {
 		VEC operator*(double a); // V * dbl
 		VEC operator/(double a); // V / dbl
 		VEC absolute();		//absolute(vector)
+		double max();
+		double min();
 		double &operator[](int n); // indexing
 		void	print();
 	friend VEC operator*(double a,const VEC v1); // dbl x V

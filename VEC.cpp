@@ -127,7 +127,7 @@ VEC *newVEC(int n){ // create dynamic VEC
 void	VEC::print(){
 	for(int i=0;i<dim;i++)
 		printf("%g\t",val[i]);
-	//printf("\n");
+	printf("\n");
 }
 VEC VEC::absolute(){
 	VEC v2(*this);
@@ -135,4 +135,22 @@ VEC VEC::absolute(){
 	for(int i=0;i<v2.len();i++)
 		v2[i]=fabs(v2[i]);
 	return v2;
+}
+double VEC::max(){
+	VEC v2(*this);
+	double reg=v2[0];
+	for(int i=1;i<v2.len();i++){
+		if(reg<v2[i])
+			reg=v2[i];
+	}
+	return reg;
+}
+double VEC::min(){
+	VEC v2(*this);
+	double reg=v2[0];
+	for(int i=1;i<v2.len();i++){
+		if(reg>v2[i])
+			reg=v2[i];
+	}
+	return reg;
 }

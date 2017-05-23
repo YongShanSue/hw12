@@ -12,13 +12,18 @@
 class MAT {
 	private:
 		int n; // define nxn matrix
+		int ROW;
+		int COLUMN;
 		VEC **va; // array of n pointers to vectors
 	public:
 		MAT(int dim); // uninit constructor
+		MAT(int row,int column); // uninit constructor
 		MAT(const MAT &m1); // copy constructor
 		MAT(int dim,double *v); // init constructor
 		~MAT(); // destructor
 		int dim(); // return dimension of the matrix
+		int getrow();
+        int getcolumn();
 		MAT tpose(); // transpose
 		MAT &operator-(); // unary operator, negative value
 		MAT &operator=(MAT m1); // assignment
@@ -93,3 +98,12 @@ double spline(double x,int N,VEC &X,VEC &Y,VEC &M); // spline interp at x
 ////////HW11 finction//////////////////
 void getLinearSolution(MAT A,VEC & y,VEC b); 
 
+////////HW12 function
+VEC function12_forwardEuler(VEC &x_t, double step);
+VEC function12_backwardEuler(VEC &x_t,double step);
+VEC function12_trep(VEC &x_t,double step);
+MAT forwardEuler(VEC &initial,double start, double end, double step);
+MAT backwardEuler(VEC &initial,double start, double end, double step);
+MAT trep(VEC &initial,double start, double end, double step);
+VEC columnMax(MAT &m1);
+VEC columnMin(MAT &m1);
